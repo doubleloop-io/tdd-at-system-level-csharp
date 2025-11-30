@@ -1,0 +1,10 @@
+# IDE folders
+.idea
+
+# .net things
+bin
+obj
+*.user
+*.DotSettings
+
+.claude
