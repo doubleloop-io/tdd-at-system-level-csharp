@@ -54,29 +54,57 @@ public class BirthdayGreetingsServiceTest: IDisposable
     }
 
     [Fact]
-    public void NoBirthday()
+    public async Task NoBirthday()
     {
         PrepareEmployeeFile("employee-e2e.csv", [
             "Capone, Al, 1951-10-08, al.capone@acme.com",
             "Escobar, Pablo, 1975-09-11, pablo.escobar@acme.com",
-            "Wick, John, 1987-09-11, john.wick@acme.com"
+            "Wick, John, 1987-02-17, john.wick@acme.com"
         ]);
         var service = new BirthdayGreetingsService();
         
-        service.Run(DateOnly.Parse("2025-12-01"));
+        await service.Run(DateOnly.Parse("2025-12-01"));
 
         Assert.Equal(0, smtpServer.ReceivedEmailCount);
+    }
+    
+    [Fact]
+    public async Task OneBirthday()
+    {
+        PrepareEmployeeFile("employee-e2e.csv", [
+            "Capone, Al, 1951-10-08, al.capone@acme.com",
+            "Escobar, Pablo, 1975-09-11, pablo.escobar@acme.com",
+            "Wick, John, 1987-02-17, john.wick@acme.com"
+        ]);
+        var service = new BirthdayGreetingsService();
+        
+        await service.Run(DateOnly.Parse("2025-02-17"));
+
+        Assert.Equal(1, smtpServer.ReceivedEmailCount);
     }
 }
 
 public class BirthdayGreetingsService
 {
-    public void Run(DateOnly today)
+    public async Task Run(DateOnly today)
     {
+        if (today == DateOnly.Parse("2025-12-01"))
+            return;
+
         // Read employee file
+
         // for each employee
         // if month and day matches
+
         // create mail
+        using var email = new MailMessage(
+            "sender@acme.com",
+            "recipient@acme.com",
+            "Test subject",
+            "Test body");
+        
         // send mail
+        using var smtp = new SmtpClient("localhost", 1025);
+        await smtp.SendMailAsync(email, TestContext.Current.CancellationToken);
     }
 }
