@@ -1,9 +1,9 @@
 namespace BirthdayGreetings;
 
-public record Employee(string FirstName, string LastName, DateOnly BirthDate, string Email)
+public record Employee(string FirstName, string LastName, DateOnly BirthDate2, string Email)
 {
     public bool IsBirthday(DateOnly today)
     {
-        return BirthDate.Month == today.Month && BirthDate.Day == today.Day;
+        return new BirthDate(BirthDate2).IsBirthday(today);
     }
 }
