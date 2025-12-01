@@ -3,13 +3,24 @@ using netDumbster.smtp;
 
 namespace BirthdayGreetings.Tests;
 
-public class BirthdayGreetingsServiceTest
+public class BirthdayGreetingsServiceTest: IDisposable
 {
+    private readonly SimpleSmtpServer smtpServer;
+
+    public BirthdayGreetingsServiceTest()
+    {
+        smtpServer = SimpleSmtpServer.Start(1025);
+    }
+
+    public void Dispose()
+    {
+        smtpServer.Stop();
+        smtpServer.Dispose();
+    }
+
     [Fact]
     public async Task TestSendMail()
     {
-        using var server = SimpleSmtpServer.Start(1025);
-        
         using var email = new MailMessage(
             "sender@acme.com",
             "recipient@acme.com",
@@ -19,8 +30,8 @@ public class BirthdayGreetingsServiceTest
         using var smtp = new SmtpClient("localhost", 1025);
         await smtp.SendMailAsync(email, TestContext.Current.CancellationToken);
         
-        Assert.Equal(1, server.ReceivedEmailCount);
-        var received = server.ReceivedEmail[0];
+        Assert.Equal(1, smtpServer.ReceivedEmailCount);
+        var received = smtpServer.ReceivedEmail[0];
         Assert.Equal("sender@acme.com", received.FromAddress.Address);
         Assert.Equal("recipient@acme.com", received.ToAddresses[0].Address);
         Assert.Equal("Test subject", received.Subject);
@@ -45,7 +56,6 @@ public class BirthdayGreetingsServiceTest
     [Fact]
     public void NoBirthday()
     {
-        using var server = SimpleSmtpServer.Start(1025);
         File.WriteAllLines("employee-e2e.csv", [
             "last_name, first_name, date_of_birth, email",
             "Capone, Al, 1951-10-08, al.capone@acme.com",
@@ -56,7 +66,7 @@ public class BirthdayGreetingsServiceTest
         
         service.Run(DateOnly.Parse("2025-12-01"));
 
-        Assert.Equal(0, server.ReceivedEmailCount);
+        Assert.Equal(0, smtpServer.ReceivedEmailCount);
     }
 }
 
