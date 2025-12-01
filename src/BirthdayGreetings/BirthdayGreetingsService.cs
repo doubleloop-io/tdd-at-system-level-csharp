@@ -4,9 +4,20 @@ namespace BirthdayGreetings;
 
 public class BirthdayGreetingsService
 {
+    private string employeeFile;
+    private string smtpHost;
+    private int smtpPort;
+
+    public BirthdayGreetingsService(string employeeFile, string smtpHost, int smtpPort)
+    {
+        this.employeeFile = employeeFile;
+        this.smtpHost = smtpHost;
+        this.smtpPort = smtpPort;
+    }
+
     public async Task RunAsync(DateOnly today, CancellationToken cancellationToken)
     {
-        var allLines = await File.ReadAllLinesAsync("employee-e2e.csv");
+        var allLines = await File.ReadAllLinesAsync(employeeFile);
         // for each employee
         // var employeeLines = allLines.Skip(1).ToArray();
         var employeeLine = allLines[1];
@@ -26,7 +37,7 @@ public class BirthdayGreetingsService
                 "Happy birthday!",
                 $"Happy birthday, dear {firstName}!");
         
-            using var smtp = new SmtpClient("localhost", 1025);
+            using var smtp = new SmtpClient(smtpHost, smtpPort);
             await smtp.SendMailAsync(msg, cancellationToken);
         }
     }
