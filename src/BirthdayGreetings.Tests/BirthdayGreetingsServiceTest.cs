@@ -1,5 +1,6 @@
 ﻿using System.Net.Mail;
 using netDumbster.smtp;
+using static TestSupport;
 
 namespace BirthdayGreetings.Tests;
 
@@ -41,8 +42,7 @@ public class BirthdayGreetingsServiceTest: IDisposable
     [Fact]
     public void TestReadEmployeeFile()
     {
-        File.WriteAllLines("employee-e2e.csv", [
-            "last_name, first_name, date_of_birth, email",
+        TestSupport.PrepareEmployeeFile("employee-e2e.csv", [
             "Capone, Al, 1951-10-08, al.capone@acme.com",
             "Escobar, Pablo, 1975-09-11, pablo.escobar@acme.com",
             "Wick, John, 1987-09-11, john.wick@acme.com"
@@ -56,8 +56,7 @@ public class BirthdayGreetingsServiceTest: IDisposable
     [Fact]
     public void NoBirthday()
     {
-        File.WriteAllLines("employee-e2e.csv", [
-            "last_name, first_name, date_of_birth, email",
+        PrepareEmployeeFile("employee-e2e.csv", [
             "Capone, Al, 1951-10-08, al.capone@acme.com",
             "Escobar, Pablo, 1975-09-11, pablo.escobar@acme.com",
             "Wick, John, 1987-09-11, john.wick@acme.com"
