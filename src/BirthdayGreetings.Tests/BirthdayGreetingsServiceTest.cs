@@ -63,7 +63,7 @@ public class BirthdayGreetingsServiceTest: IDisposable
         ]);
         var service = new BirthdayGreetingsService();
         
-        await service.Run(DateOnly.Parse("2025-12-01"), TestContext.Current.CancellationToken);
+        await service.RunAsync(DateOnly.Parse("2025-12-01"), TestContext.Current.CancellationToken);
 
         Assert.Equal(0, smtpServer.ReceivedEmailCount);
     }
@@ -78,7 +78,7 @@ public class BirthdayGreetingsServiceTest: IDisposable
         ]);
         var service = new BirthdayGreetingsService();
         
-        await service.Run(DateOnly.Parse("2025-02-17"), TestContext.Current.CancellationToken);
+        await service.RunAsync(DateOnly.Parse("2025-02-17"), TestContext.Current.CancellationToken);
 
         Assert.Equal(1, smtpServer.ReceivedEmailCount);
         var received = smtpServer.ReceivedEmail[0];

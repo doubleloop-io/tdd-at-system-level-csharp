@@ -4,7 +4,7 @@ namespace BirthdayGreetings;
 
 public class BirthdayGreetingsService
 {
-    public async Task Run(DateOnly today, CancellationToken cancellationToken)
+    public async Task RunAsync(DateOnly today, CancellationToken cancellationToken)
     {
         var allLines = await File.ReadAllLinesAsync("employee-e2e.csv");
         // for each employee
