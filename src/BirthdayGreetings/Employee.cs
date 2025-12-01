@@ -1,6 +1,6 @@
 namespace BirthdayGreetings;
 
-public class Employee(string FirstName, string LastName, DateOnly BirthDate, string Email)
+public record Employee(string FirstName, string LastName, DateOnly BirthDate, string Email)
 {
     public bool IsBirthday(DateOnly today)
     {

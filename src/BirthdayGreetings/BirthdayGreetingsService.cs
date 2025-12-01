@@ -40,9 +40,9 @@ public class BirthdayGreetingsService
             {
                 using var msg = new MailMessage(
                     "greetings@acme.com",
-                    email,
+                    employee.Email,
                     "Happy birthday!",
-                    $"Happy birthday, dear {firstName}!");
+                    $"Happy birthday, dear {employee.FirstName}!");
 
                 try
                 {
