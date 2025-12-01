@@ -17,28 +17,43 @@ public class BirthdayGreetingsService
 
     public async Task RunAsync(DateOnly today, CancellationToken cancellationToken)
     {
-        var allLines = await File.ReadAllLinesAsync(employeeFile);
-        // for each employee
-        // var employeeLines = allLines.Skip(1).ToArray();
-        var employeeLine = allLines[1];
-        var employeeParts = employeeLine
-            .Split(",")
-            .Select(x => x.Trim())
-            .ToArray();
-        var firstName = employeeParts[1];
-        var birthDate = DateOnly.Parse(employeeParts[2]);
-        var email = employeeParts[3];
+        if (!File.Exists(employeeFile))
+            throw new Exception($"Employee file does not exists: {employeeFile}");
 
-        if (birthDate.Month == today.Month && birthDate.Day == today.Day)
-        {
-            using var msg = new MailMessage(
-                "greetings@acme.com",
-                email,
-                "Happy birthday!",
-                $"Happy birthday, dear {firstName}!");
+        var allLines = await File.ReadAllLinesAsync(employeeFile);
+        var employeeLines = allLines.Skip(1).ToArray();
         
-            using var smtp = new SmtpClient(smtpHost, smtpPort);
-            await smtp.SendMailAsync(msg, cancellationToken);
+        foreach (var employeeLine in employeeLines)
+        {
+            var employeeParts = employeeLine
+                .Split(",")
+                .Select(x => x.Trim())
+                .ToArray();
+            
+            var firstName = employeeParts[1];
+            var lastName = employeeParts[0];
+            var birthDate = DateOnly.Parse(employeeParts[2]);
+            var email = employeeParts[3];
+            var employee = new Employee(firstName, lastName, birthDate, email);
+
+            if (employee.IsBirthday(today))
+            {
+                using var msg = new MailMessage(
+                    "greetings@acme.com",
+                    email,
+                    "Happy birthday!",
+                    $"Happy birthday, dear {firstName}!");
+
+                try
+                {
+                    using var smtp = new SmtpClient(smtpHost, smtpPort);
+                    await smtp.SendMailAsync(msg, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Smtp server unreachable at {smtpHost}:{smtpPort}", ex);
+                }
+            }
         }
     }
 }
