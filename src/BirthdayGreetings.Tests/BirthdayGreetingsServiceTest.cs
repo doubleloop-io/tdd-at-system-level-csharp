@@ -63,7 +63,7 @@ public class BirthdayGreetingsServiceTest: IDisposable
         ]);
         var service = new BirthdayGreetingsService();
         
-        await service.Run(DateOnly.Parse("2025-12-01"));
+        await service.Run(DateOnly.Parse("2025-12-01"), TestContext.Current.CancellationToken);
 
         Assert.Equal(0, smtpServer.ReceivedEmailCount);
     }
@@ -78,7 +78,7 @@ public class BirthdayGreetingsServiceTest: IDisposable
         ]);
         var service = new BirthdayGreetingsService();
         
-        await service.Run(DateOnly.Parse("2025-02-17"));
+        await service.Run(DateOnly.Parse("2025-02-17"), TestContext.Current.CancellationToken);
 
         Assert.Equal(1, smtpServer.ReceivedEmailCount);
         var received = smtpServer.ReceivedEmail[0];
@@ -86,37 +86,5 @@ public class BirthdayGreetingsServiceTest: IDisposable
         Assert.Equal("john.wick@acme.com", received.ToAddresses[0].Address);
         Assert.Equal("Happy birthday!", received.Subject);
         Assert.Equal("Happy birthday, dear John!", received.MessageParts[0].BodyData);
-    }
-}
-
-public class BirthdayGreetingsService
-{
-    public async Task Run(DateOnly today)
-    {
-        var allLines = await File.ReadAllLinesAsync("employee-e2e.csv");
-        // for each employee
-        // var employeeLines = allLines.Skip(1).ToArray();
-        var employeeLine = allLines[1];
-        var employeeParts = employeeLine
-            .Split(",")
-            .Select(x => x.Trim())
-            .ToArray();
-        var firstName = employeeParts[1];
-        var birthDate = DateOnly.Parse(employeeParts[2]);
-        var email = employeeParts[3];
-
-        if (birthDate.Month == today.Month && birthDate.Day == today.Day)
-        {
-            // create mail
-            using var msg = new MailMessage(
-                "greetings@acme.com",
-                email,
-                "Happy birthday!",
-                $"Happy birthday, dear {firstName}!");
-        
-            // send mail
-            using var smtp = new SmtpClient("localhost", 1025);
-            await smtp.SendMailAsync(msg, TestContext.Current.CancellationToken);
-        }
     }
 }
