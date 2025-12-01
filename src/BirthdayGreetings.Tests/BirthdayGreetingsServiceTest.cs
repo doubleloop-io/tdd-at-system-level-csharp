@@ -1,5 +1,4 @@
-﻿using System.Net.Mail;
-using netDumbster.smtp;
+﻿using netDumbster.smtp;
 using static TestSupport;
 
 namespace BirthdayGreetings.Tests;
@@ -50,10 +49,6 @@ public class BirthdayGreetingsServiceTest: IDisposable
         await service.RunAsync(DateOnly.Parse("2025-02-17"), TestContext.Current.CancellationToken);
 
         Assert.Equal(1, smtpServer.ReceivedEmailCount);
-        var received = smtpServer.ReceivedEmail[0];
-        Assert.Equal("greetings@acme.com", received.FromAddress.Address);
-        Assert.Equal("john.wick@acme.com", received.ToAddresses[0].Address);
-        Assert.Equal("Happy birthday!", received.Subject);
-        Assert.Equal("Happy birthday, dear John!", received.MessageParts[0].BodyData);
+        AssertContainsGreetingMessage(smtpServer.ReceivedEmail, "John", "john.wick@acme.com");
     }
 }
