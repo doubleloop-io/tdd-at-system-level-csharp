@@ -50,4 +50,21 @@ public class SmtpPostalOfficeTest : IDisposable
             "John", "john.wick@acme.com"
         );
     }
+    
+    [Fact]
+    public async Task SmtpServerUnreachable()
+    {
+        smtpServer.Stop();
+        var smtpPostalOffice = new SmtpPostalOffice(smtpHost, smtpPort);
+        
+        var ex = await Record.ExceptionAsync(()  => 
+            smtpPostalOffice.SendMail(
+                "Al", 
+                "al.capone@acme.com", 
+                TestContext.Current.CancellationToken)
+        );
+        
+        Assert.Contains("Smtp server unreachable", ex.Message);
+        Assert.Contains($"{smtpHost}:{smtpPort}", ex.Message);
+    }
 }
