@@ -13,6 +13,18 @@ public class BirthdayGreetingsService
 
     public async Task RunAsync(DateOnly today, CancellationToken cancellationToken)
     {
+        var employees = await LoadEmployeesAsync();
+
+        foreach (var employee in employees) {    
+            if (employee.IsBirthday(today))
+            {
+                await smtpPostalOffice.SendMail(employee.FirstName, employee.Email, cancellationToken);
+            }
+        }
+    }
+
+    private async Task<List<Employee>> LoadEmployeesAsync()
+    {
         if (!File.Exists(employeeFile))
             throw new Exception($"Employee file does not exists: {employeeFile}");
 
@@ -34,12 +46,7 @@ public class BirthdayGreetingsService
                 employeeParts[3]);
             employees.Add(employee);
         }
-        
-        foreach (var employee in employees) {    
-            if (employee.IsBirthday(today))
-            {
-                await smtpPostalOffice.SendMail(employee.FirstName, employee.Email, cancellationToken);
-            }
-        }
+
+        return employees;
     }
 }
