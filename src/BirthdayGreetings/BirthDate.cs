@@ -1,8 +1,10 @@
+using System.Globalization;
+
 namespace BirthdayGreetings;
 
 public record BirthDate
 {
-    public BirthDate(DateOnly Value) => 
+    BirthDate(DateOnly Value) => 
         this.Value = Value;
 
     public static BirthDate From(string value) => 
@@ -14,4 +16,7 @@ public record BirthDate
     }
 
     DateOnly Value { get; }
+
+    public override string ToString() => 
+        Value.ToString("yyyy-MM-dd");
 }
