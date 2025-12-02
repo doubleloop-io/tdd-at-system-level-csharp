@@ -19,6 +19,7 @@ public class BirthdayGreetingsService
         var allLines = await File.ReadAllLinesAsync(employeeFile);
         var employeeLines = allLines.Skip(1).ToArray();
         
+        var employees = new List<Employee>();
         foreach (var employeeLine in employeeLines)
         {
             var employeeParts = employeeLine
@@ -27,11 +28,14 @@ public class BirthdayGreetingsService
                 .ToArray();
 
             var employee = new Employee(
-                employeeParts[1], 
+                employeeParts[1],
                 employeeParts[0],
                 BirthDate.From(employeeParts[2]),
                 employeeParts[3]);
-
+            employees.Add(employee);
+        }
+        
+        foreach (var employee in employees) {    
             if (employee.IsBirthday(today))
             {
                 await smtpPostalOffice.SendMail(employee.FirstName, employee.Email, cancellationToken);
