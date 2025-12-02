@@ -2,18 +2,18 @@ namespace BirthdayGreetings;
 
 public class BirthdayGreetingsService
 {
-    CsvEmployeeCatalog csvEmployeeCatalog;
+    IEmployeeCatalog employeeCatalog;
     IPostalOffice postalOffice;
 
-    public BirthdayGreetingsService(CsvEmployeeCatalog csvEmployeeCatalog, IPostalOffice postalOffice)
+    public BirthdayGreetingsService(IEmployeeCatalog employeeCatalog, IPostalOffice postalOffice)
     {
-        this.csvEmployeeCatalog = csvEmployeeCatalog;
+        this.employeeCatalog = employeeCatalog;
         this.postalOffice = postalOffice;
     }
 
     public async Task RunAsync(DateOnly today, CancellationToken cancellationToken)
     {
-        var employees = await csvEmployeeCatalog.LoadAsync();
+        var employees = await employeeCatalog.LoadAsync();
 
         foreach (var employee in employees) {    
             if (employee.IsBirthday(today))

@@ -1,6 +1,11 @@
 namespace BirthdayGreetings;
 
-public class CsvEmployeeCatalog(string employeeFile)
+public interface IEmployeeCatalog
+{
+    Task<List<Employee>> LoadAsync();
+}
+
+public class CsvEmployeeCatalog(string employeeFile) : IEmployeeCatalog
 {
     public async Task<List<Employee>> LoadAsync()
     {
