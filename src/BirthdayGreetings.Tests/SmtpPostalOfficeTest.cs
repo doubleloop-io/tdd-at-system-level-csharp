@@ -25,9 +25,9 @@ public class SmtpPostalOfficeTest : IDisposable
         smtpServer.Stop();
         smtpServer.Dispose();
     }
-
+    
     [Fact]
-    public async Task OneMessage()
+    public async Task ManyMessages()
     {
         var smtpPostalOffice = new SmtpPostalOffice(smtpHost, smtpPort);
 
@@ -35,11 +35,19 @@ public class SmtpPostalOfficeTest : IDisposable
             "Al", 
             "al.capone@acme.com", 
             TestContext.Current.CancellationToken);
+        await smtpPostalOffice.SendMail(
+            "John", 
+            "john.wick@acme.com", 
+            TestContext.Current.CancellationToken);
         
-        Assert.Equal(1, smtpServer.ReceivedEmailCount);
+        Assert.Equal(2, smtpServer.ReceivedEmailCount);
         AssertContainsGreetingMessage(
             smtpServer.ReceivedEmail,
             "Al", "al.capone@acme.com"
-            );
+        );
+        AssertContainsGreetingMessage(
+            smtpServer.ReceivedEmail,
+            "John", "john.wick@acme.com"
+        );
     }
 }
