@@ -2,18 +2,18 @@ namespace BirthdayGreetings;
 
 public class BirthdayGreetingsService
 {
-    private string employeeFile;
+    CsvEmployeeCatalog csvEmployeeCatalog;
     SmtpPostalOffice smtpPostalOffice;
 
     public BirthdayGreetingsService(string employeeFile, SmtpPostalOffice smtpPostalOffice)
     {
-        this.employeeFile = employeeFile;
+        this.csvEmployeeCatalog = new CsvEmployeeCatalog(employeeFile);
         this.smtpPostalOffice = smtpPostalOffice;
     }
 
     public async Task RunAsync(DateOnly today, CancellationToken cancellationToken)
     {
-        var employees = await LoadEmployeesAsync();
+        var employees = await csvEmployeeCatalog.LoadEmployeesAsync();
 
         foreach (var employee in employees) {    
             if (employee.IsBirthday(today))
@@ -21,32 +21,5 @@ public class BirthdayGreetingsService
                 await smtpPostalOffice.SendMail(employee.FirstName, employee.Email, cancellationToken);
             }
         }
-    }
-
-    private async Task<List<Employee>> LoadEmployeesAsync()
-    {
-        if (!File.Exists(employeeFile))
-            throw new Exception($"Employee file does not exists: {employeeFile}");
-
-        var allLines = await File.ReadAllLinesAsync(employeeFile);
-        var employeeLines = allLines.Skip(1).ToArray();
-        
-        var employees = new List<Employee>();
-        foreach (var employeeLine in employeeLines)
-        {
-            var employeeParts = employeeLine
-                .Split(",")
-                .Select(x => x.Trim())
-                .ToArray();
-
-            var employee = new Employee(
-                employeeParts[1],
-                employeeParts[0],
-                BirthDate.From(employeeParts[2]),
-                employeeParts[3]);
-            employees.Add(employee);
-        }
-
-        return employees;
     }
 }
