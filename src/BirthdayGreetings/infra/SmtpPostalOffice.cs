@@ -2,11 +2,6 @@ using System.Net.Mail;
 
 namespace BirthdayGreetings;
 
-public interface IPostalOffice
-{
-    Task SendGreetingsMessage(GreetingsMessage message, CancellationToken cancellationToken);
-}
-
 public class SmtpPostalOffice(string smtpHost, int smtpPort) : IPostalOffice
 {
     public async Task SendGreetingsMessage(GreetingsMessage message, CancellationToken cancellationToken)

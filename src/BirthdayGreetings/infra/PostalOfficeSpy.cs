@@ -1,4 +1,4 @@
-namespace BirthdayGreetings.Tests;
+namespace BirthdayGreetings;
 
 public class PostalOfficeSpy : IPostalOffice
 {

@@ -1,16 +1,7 @@
 namespace BirthdayGreetings;
 
-public class BirthdayGreetingsService
+public class BirthdayGreetingsService(IEmployeeCatalog employeeCatalog, IPostalOffice postalOffice)
 {
-    IEmployeeCatalog employeeCatalog;
-    IPostalOffice postalOffice;
-
-    public BirthdayGreetingsService(IEmployeeCatalog employeeCatalog, IPostalOffice postalOffice)
-    {
-        this.employeeCatalog = employeeCatalog;
-        this.postalOffice = postalOffice;
-    }
-
     public async Task RunAsync(DateOnly today, CancellationToken cancellationToken)
     {
         var employees = await employeeCatalog.LoadAsync();

@@ -1,4 +1,4 @@
-namespace BirthdayGreetings.Tests;
+namespace BirthdayGreetings;
 
 public class InMemoryEmployeeCatalog(List<Employee> employees) : IEmployeeCatalog
 {
