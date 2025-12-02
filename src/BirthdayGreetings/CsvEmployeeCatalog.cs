@@ -2,7 +2,7 @@ namespace BirthdayGreetings;
 
 public class CsvEmployeeCatalog(string employeeFile)
 {
-    public async Task<List<Employee>> LoadEmployeesAsync()
+    public async Task<List<Employee>> LoadAsync()
     {
         if (!File.Exists(employeeFile))
             throw new Exception($"Employee file does not exists: {employeeFile}");

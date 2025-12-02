@@ -13,7 +13,7 @@ public class BirthdayGreetingsService
 
     public async Task RunAsync(DateOnly today, CancellationToken cancellationToken)
     {
-        var employees = await csvEmployeeCatalog.LoadEmployeesAsync();
+        var employees = await csvEmployeeCatalog.LoadAsync();
 
         foreach (var employee in employees) {    
             if (employee.IsBirthday(today))
