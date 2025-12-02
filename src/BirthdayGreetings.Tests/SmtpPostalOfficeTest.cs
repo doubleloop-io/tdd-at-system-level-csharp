@@ -31,11 +31,11 @@ public class SmtpPostalOfficeTest : IDisposable
     {
         var smtpPostalOffice = new SmtpPostalOffice(smtpHost, smtpPort);
 
-        await smtpPostalOffice.SendMail(
+        await smtpPostalOffice.SendGreetingsMessage(
             "Al", 
             "al.capone@acme.com", 
             TestContext.Current.CancellationToken);
-        await smtpPostalOffice.SendMail(
+        await smtpPostalOffice.SendGreetingsMessage(
             "John", 
             "john.wick@acme.com", 
             TestContext.Current.CancellationToken);
@@ -58,7 +58,7 @@ public class SmtpPostalOfficeTest : IDisposable
         var smtpPostalOffice = new SmtpPostalOffice(smtpHost, smtpPort);
         
         var ex = await Record.ExceptionAsync(()  => 
-            smtpPostalOffice.SendMail(
+            smtpPostalOffice.SendGreetingsMessage(
                 "Al", 
                 "al.capone@acme.com", 
                 TestContext.Current.CancellationToken)

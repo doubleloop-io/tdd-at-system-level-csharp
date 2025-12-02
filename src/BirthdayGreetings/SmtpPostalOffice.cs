@@ -2,9 +2,14 @@ using System.Net.Mail;
 
 namespace BirthdayGreetings;
 
-public class SmtpPostalOffice(string smtpHost, int smtpPort)
+public interface IPostalOffice
 {
-    public async Task SendMail(string name, string email, CancellationToken cancellationToken)
+    Task SendGreetingsMessage(string name, string email, CancellationToken cancellationToken);
+}
+
+public class SmtpPostalOffice(string smtpHost, int smtpPort) : IPostalOffice
+{
+    public async Task SendGreetingsMessage(string name, string email, CancellationToken cancellationToken)
     {
         using var msg = new MailMessage(
             "greetings@acme.com",
