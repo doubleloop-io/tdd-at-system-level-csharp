@@ -29,12 +29,12 @@ public class BirthdayGreetingsService
                 .Split(",")
                 .Select(x => x.Trim())
                 .ToArray();
-            
-            var firstName = employeeParts[1];
-            var lastName = employeeParts[0];
-            var birthDate = DateOnly.Parse(employeeParts[2]);
-            var email = employeeParts[3];
-            var employee = new Employee(firstName, lastName, birthDate, email);
+
+            var employee = new Employee(
+                employeeParts[1], 
+                employeeParts[0],
+                BirthDate.From(employeeParts[2]),
+                employeeParts[3]);
 
             if (employee.IsBirthday(today))
             {

@@ -5,7 +5,7 @@ public class BirthDateTest
     [Fact]
     public void BirthDay()
     {
-        var birthDate = new BirthDate(DateOnly.Parse("1984-09-27"));
+        var birthDate = BirthDate.From("1984-09-27");
         
         Assert.True(birthDate.IsBirthday(DateOnly.Parse("2025-09-27")));
     }
@@ -13,7 +13,7 @@ public class BirthDateTest
     [Fact]
     public void SameMonthDifferentDay()
     {
-        var birthDate = new BirthDate(DateOnly.Parse("1984-09-27"));
+        var birthDate = BirthDate.From("1984-09-27");
         
         Assert.False(birthDate.IsBirthday(DateOnly.Parse("2025-09-01")));
     }
@@ -21,7 +21,7 @@ public class BirthDateTest
     [Fact]
     public void DifferentMonthSameDay()
     {
-        var birthDate = new BirthDate(DateOnly.Parse("1984-02-27"));
+        var birthDate = BirthDate.From("1984-02-27");
         
         Assert.False(birthDate.IsBirthday(DateOnly.Parse("2025-09-27")));
     }

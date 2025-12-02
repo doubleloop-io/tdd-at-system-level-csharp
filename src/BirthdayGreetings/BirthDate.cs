@@ -1,9 +1,17 @@
 namespace BirthdayGreetings;
 
-public record BirthDate(DateOnly Value)
+public record BirthDate
 {
+    public BirthDate(DateOnly Value) => 
+        this.Value = Value;
+
+    public static BirthDate From(string value) => 
+        new(DateOnly.Parse(value));
+    
     public bool IsBirthday(DateOnly date)
     {
         return Value.Month == date.Month && Value.Day == date.Day;
     }
+
+    DateOnly Value { get; }
 }
