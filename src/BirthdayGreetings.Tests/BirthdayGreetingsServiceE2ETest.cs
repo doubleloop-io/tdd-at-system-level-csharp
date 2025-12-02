@@ -3,14 +3,14 @@ using static TestSupport;
 
 namespace BirthdayGreetings.Tests;
 
-public class BirthdayGreetingsServiceTest: IDisposable
+public class BirthdayGreetingsServiceE2ETest: IDisposable
 {
     private string employeeFile = "employee-e2e.csv";
     private string smtpHost = "localhost";
     private int smtpPort = 1026;
     private readonly SimpleSmtpServer smtpServer;
 
-    public BirthdayGreetingsServiceTest()
+    public BirthdayGreetingsServiceE2ETest()
     {
         smtpServer = SimpleSmtpServer.Start(smtpPort);
     }
@@ -29,7 +29,7 @@ public class BirthdayGreetingsServiceTest: IDisposable
             "Escobar, Pablo, 1975-09-11, pablo.escobar@acme.com",
             "Wick, John, 1987-02-17, john.wick@acme.com"
         ]);
-        var service = new BirthdayGreetingsService(new CsvEmployeeCatalog(employeeFile), new SmtpPostalOffice(smtpHost, smtpPort));
+        var service = new BirthdayGreetingsServiceE2E(new CsvEmployeeCatalog(employeeFile), new SmtpPostalOffice(smtpHost, smtpPort));
         
         await service.RunAsync(DateOnly.Parse("2025-12-01"), TestContext.Current.CancellationToken);
 
@@ -44,7 +44,7 @@ public class BirthdayGreetingsServiceTest: IDisposable
             "Wick, John, 1987-02-17, john.wick@acme.com",
             "Escobar, Pablo, 1975-09-11, pablo.escobar@acme.com",
         ]);
-        var service = new BirthdayGreetingsService(new CsvEmployeeCatalog(employeeFile), new SmtpPostalOffice(smtpHost, smtpPort));
+        var service = new BirthdayGreetingsServiceE2E(new CsvEmployeeCatalog(employeeFile), new SmtpPostalOffice(smtpHost, smtpPort));
         
         await service.RunAsync(DateOnly.Parse("2025-09-11"), TestContext.Current.CancellationToken);
 
