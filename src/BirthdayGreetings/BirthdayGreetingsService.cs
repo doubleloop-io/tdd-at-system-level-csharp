@@ -3,12 +3,12 @@ namespace BirthdayGreetings;
 public class BirthdayGreetingsService
 {
     CsvEmployeeCatalog csvEmployeeCatalog;
-    SmtpPostalOffice smtpPostalOffice;
+    IPostalOffice postalOffice;
 
-    public BirthdayGreetingsService(CsvEmployeeCatalog csvEmployeeCatalog, SmtpPostalOffice smtpPostalOffice)
+    public BirthdayGreetingsService(CsvEmployeeCatalog csvEmployeeCatalog, IPostalOffice postalOffice)
     {
         this.csvEmployeeCatalog = csvEmployeeCatalog;
-        this.smtpPostalOffice = smtpPostalOffice;
+        this.postalOffice = postalOffice;
     }
 
     public async Task RunAsync(DateOnly today, CancellationToken cancellationToken)
@@ -18,7 +18,7 @@ public class BirthdayGreetingsService
         foreach (var employee in employees) {    
             if (employee.IsBirthday(today))
             {
-                await smtpPostalOffice.SendGreetingsMessage(employee.FirstName, employee.Email, cancellationToken);
+                await postalOffice.SendGreetingsMessage(employee.FirstName, employee.Email, cancellationToken);
             }
         }
     }
