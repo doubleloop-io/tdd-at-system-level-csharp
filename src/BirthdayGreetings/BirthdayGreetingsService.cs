@@ -1,11 +1,11 @@
 namespace BirthdayGreetings;
 
-public class BirthdayGreetingsServiceE2E
+public class BirthdayGreetingsService
 {
     IEmployeeCatalog employeeCatalog;
     IPostalOffice postalOffice;
 
-    public BirthdayGreetingsServiceE2E(IEmployeeCatalog employeeCatalog, IPostalOffice postalOffice)
+    public BirthdayGreetingsService(IEmployeeCatalog employeeCatalog, IPostalOffice postalOffice)
     {
         this.employeeCatalog = employeeCatalog;
         this.postalOffice = postalOffice;
