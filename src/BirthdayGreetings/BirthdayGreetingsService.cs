@@ -5,9 +5,9 @@ public class BirthdayGreetingsService
     CsvEmployeeCatalog csvEmployeeCatalog;
     SmtpPostalOffice smtpPostalOffice;
 
-    public BirthdayGreetingsService(string employeeFile, SmtpPostalOffice smtpPostalOffice)
+    public BirthdayGreetingsService(CsvEmployeeCatalog csvEmployeeCatalog, SmtpPostalOffice smtpPostalOffice)
     {
-        this.csvEmployeeCatalog = new CsvEmployeeCatalog(employeeFile);
+        this.csvEmployeeCatalog = csvEmployeeCatalog;
         this.smtpPostalOffice = smtpPostalOffice;
     }
 
