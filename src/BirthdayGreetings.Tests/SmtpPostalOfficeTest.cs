@@ -14,7 +14,6 @@ public class SmtpPostalOfficeTest : IDisposable
      * - Many Messages
      * - Smtp unreachable
      */
-
     public SmtpPostalOfficeTest()
     {
         smtpServer = SimpleSmtpServer.Start(smtpPort);
@@ -25,21 +24,21 @@ public class SmtpPostalOfficeTest : IDisposable
         smtpServer.Stop();
         smtpServer.Dispose();
     }
-    
+
     [Fact]
     public async Task ManyMessages()
     {
         var smtpPostalOffice = new SmtpPostalOffice(smtpHost, smtpPort);
 
         await smtpPostalOffice.SendGreetingsMessage(
-            "Al", 
-            "al.capone@acme.com", 
+            new GreetingsMessage("Al",
+                "al.capone@acme.com"),
             TestContext.Current.CancellationToken);
         await smtpPostalOffice.SendGreetingsMessage(
-            "John", 
-            "john.wick@acme.com", 
+            new GreetingsMessage("John",
+                "john.wick@acme.com"),
             TestContext.Current.CancellationToken);
-        
+
         Assert.Equal(2, smtpServer.ReceivedEmailCount);
         AssertContainsGreetingMessage(
             smtpServer.ReceivedEmail,
@@ -50,20 +49,20 @@ public class SmtpPostalOfficeTest : IDisposable
             "John", "john.wick@acme.com"
         );
     }
-    
+
     [Fact]
     public async Task SmtpServerUnreachable()
     {
         smtpServer.Stop();
         var smtpPostalOffice = new SmtpPostalOffice(smtpHost, smtpPort);
-        
-        var ex = await Record.ExceptionAsync(()  => 
+
+        var ex = await Record.ExceptionAsync(() =>
             smtpPostalOffice.SendGreetingsMessage(
-                "Al", 
-                "al.capone@acme.com", 
+                new GreetingsMessage("Al",
+                    "al.capone@acme.com"),
                 TestContext.Current.CancellationToken)
         );
-        
+
         Assert.Contains("Smtp server unreachable", ex.Message);
         Assert.Contains($"{smtpHost}:{smtpPort}", ex.Message);
     }

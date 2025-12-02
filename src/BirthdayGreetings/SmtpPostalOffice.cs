@@ -4,18 +4,18 @@ namespace BirthdayGreetings;
 
 public interface IPostalOffice
 {
-    Task SendGreetingsMessage(string name, string email, CancellationToken cancellationToken);
+    Task SendGreetingsMessage(GreetingsMessage message, CancellationToken cancellationToken);
 }
 
 public class SmtpPostalOffice(string smtpHost, int smtpPort) : IPostalOffice
 {
-    public async Task SendGreetingsMessage(string name, string email, CancellationToken cancellationToken)
+    public async Task SendGreetingsMessage(GreetingsMessage message, CancellationToken cancellationToken)
     {
         using var msg = new MailMessage(
             "greetings@acme.com",
-            email,
+            message.Email,
             "Happy birthday!",
-            $"Happy birthday, dear {name}!");
+            $"Happy birthday, dear {message.Name}!");
 
         try
         {

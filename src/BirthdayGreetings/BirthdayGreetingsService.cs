@@ -18,7 +18,8 @@ public class BirthdayGreetingsService
         foreach (var employee in employees) {    
             if (employee.IsBirthday(today))
             {
-                await postalOffice.SendGreetingsMessage(employee.FirstName, employee.Email, cancellationToken);
+                var msg = new GreetingsMessage(employee.FirstName, employee.Email);
+                await postalOffice.SendGreetingsMessage(msg, cancellationToken);
             }
         }
     }
