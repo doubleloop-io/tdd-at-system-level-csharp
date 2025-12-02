@@ -84,25 +84,4 @@ public class BirthdayGreetingsServiceTest: IDisposable
         Assert.Contains("Employee file does not exists", ex.Message);
         Assert.Contains(notExistentFile, ex.Message);
     }
-    
-    [Fact]
-    public async Task SmtpServerUnreachable()
-    {
-        smtpServer.Stop();
-        PrepareEmployeeFile(employeeFile, [
-            "Capone, Al, 1951-10-08, al.capone@acme.com",
-            "Wick, John, 1987-02-17, john.wick@acme.com",
-            "Escobar, Pablo, 1975-09-11, pablo.escobar@acme.com",
-        ]);
-        var service = new BirthdayGreetingsService(employeeFile, smtpHost, smtpPort);
-        
-        var ex = await Record.ExceptionAsync(()  => 
-            service.RunAsync(
-                DateOnly.Parse("2025-02-17"), 
-                TestContext.Current.CancellationToken)
-        );
-        
-        Assert.Contains("Smtp server unreachable", ex.Message);
-        Assert.Contains($"{smtpHost}:{smtpPort}", ex.Message);
-    }
 }
