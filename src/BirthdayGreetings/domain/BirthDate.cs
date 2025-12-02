@@ -4,7 +4,7 @@ namespace BirthdayGreetings;
 
 public record BirthDate
 {
-    BirthDate(DateOnly Value) => 
+    public BirthDate(DateOnly Value) => 
         this.Value = Value;
 
     public static BirthDate From(string value) => 
@@ -15,7 +15,7 @@ public record BirthDate
         return Value.Month == date.Month && Value.Day == date.Day;
     }
 
-    DateOnly Value { get; }
+    public DateOnly Value { get; }
 
     public override string ToString() => 
         Value.ToString("yyyy-MM-dd");
