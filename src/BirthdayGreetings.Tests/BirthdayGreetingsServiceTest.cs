@@ -29,7 +29,9 @@ public class BirthdayGreetingsServiceTest: IDisposable
             "Escobar, Pablo, 1975-09-11, pablo.escobar@acme.com",
             "Wick, John, 1987-02-17, john.wick@acme.com"
         ]);
-        var service = new BirthdayGreetingsService(employeeFile, smtpHost, smtpPort);
+        var service = new BirthdayGreetingsService(
+            employeeFile, 
+            new SmtpPostalOffice(smtpHost, smtpPort));
         
         await service.RunAsync(DateOnly.Parse("2025-12-01"), TestContext.Current.CancellationToken);
 
@@ -44,7 +46,9 @@ public class BirthdayGreetingsServiceTest: IDisposable
             "Wick, John, 1987-02-17, john.wick@acme.com",
             "Escobar, Pablo, 1975-09-11, pablo.escobar@acme.com",
         ]);
-        var service = new BirthdayGreetingsService(employeeFile, smtpHost, smtpPort);
+        var service = new BirthdayGreetingsService(
+            employeeFile, 
+            new SmtpPostalOffice(smtpHost, smtpPort));
         
         await service.RunAsync(DateOnly.Parse("2025-02-17"), TestContext.Current.CancellationToken);
 
@@ -60,7 +64,9 @@ public class BirthdayGreetingsServiceTest: IDisposable
             "Wick, John, 1987-02-17, john.wick@acme.com",
             "Escobar, Pablo, 1975-09-11, pablo.escobar@acme.com",
         ]);
-        var service = new BirthdayGreetingsService(employeeFile, smtpHost, smtpPort);
+        var service = new BirthdayGreetingsService(
+            employeeFile, 
+            new SmtpPostalOffice(smtpHost, smtpPort));
         
         await service.RunAsync(DateOnly.Parse("2025-09-11"), TestContext.Current.CancellationToken);
 
@@ -73,7 +79,9 @@ public class BirthdayGreetingsServiceTest: IDisposable
     public async Task EmployeeFileMissing()
     {
         var notExistentFile = "this-does-not-exists.csv";
-        var service = new BirthdayGreetingsService(notExistentFile, smtpHost, smtpPort);
+        var service = new BirthdayGreetingsService(
+            notExistentFile, 
+            new SmtpPostalOffice(smtpHost, smtpPort));
         
         var ex = await Record.ExceptionAsync(()  => 
             service.RunAsync(

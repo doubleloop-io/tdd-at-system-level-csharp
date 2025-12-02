@@ -5,10 +5,10 @@ public class BirthdayGreetingsService
     private string employeeFile;
     SmtpPostalOffice smtpPostalOffice;
 
-    public BirthdayGreetingsService(string employeeFile, string smtpHost, int smtpPort)
+    public BirthdayGreetingsService(string employeeFile, SmtpPostalOffice smtpPostalOffice)
     {
         this.employeeFile = employeeFile;
-        smtpPostalOffice = new SmtpPostalOffice(smtpHost, smtpPort);
+        this.smtpPostalOffice = smtpPostalOffice;
     }
 
     public async Task RunAsync(DateOnly today, CancellationToken cancellationToken)

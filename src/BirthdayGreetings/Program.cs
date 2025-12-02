@@ -4,7 +4,8 @@ Console.WriteLine("Welcome to the Birthday Greetings kata");
 
 var employeeFile = "employees-hr.csv";
 DemoData.SeedCsv(employeeFile, ManyEmployees());
-var service = new BirthdayGreetingsService(employeeFile, "localhost", 1025);
+var service = new BirthdayGreetingsService(employeeFile,
+    new SmtpPostalOffice("localhost", 1025));
 await service.RunAsync(DateOnly.Parse("2025-09-11"), CancellationToken.None);
 
 Employee[] ManyEmployees() => [
